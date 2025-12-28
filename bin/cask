@@ -104,20 +104,11 @@ def main(argv: list[str]) -> int:
             _usage()
             return EXIT_ERROR
 
-        # Claude Code foreground fallback: avoid blocking the tool call if run_in_background was forgotten.
+        # Strict mode: require run_in_background=true in Claude Code
         if os.environ.get("CLAUDECODE") == "1" and not _check_background_mode():
-            if output_path:
-                cask_w = script_dir / "cask-w"
-                cmd = [sys.executable, str(cask_w), "--timeout", str(timeout), "--output", str(output_path), message]
-                _popen_detached(cmd)
-            else:
-                comm = CodexCommunicator(lazy_init=True)
-                healthy, status = comm._check_session_health_impl(probe_terminal=False)
-                if not healthy:
-                    raise RuntimeError(f"[ERROR] Session error: {status}")
-                comm._send_message(message)
-            print("CCB_END_TURN", file=sys.stderr)
-            return EXIT_OK
+            print("[ERROR] cask MUST be called with run_in_background=true", file=sys.stderr)
+            print("Correct usage: Bash(cask \"...\", run_in_background=true)", file=sys.stderr)
+            return EXIT_ERROR
 
         comm = CodexCommunicator(lazy_init=True)
 
