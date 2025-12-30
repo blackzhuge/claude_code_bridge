@@ -50,6 +50,32 @@ def _load_session_path() -> Path | None:
     return None
 
 
+def _update_session_file(actual_session: Path) -> None:
+    """Update .gemini-session with actual session path if different"""
+    session_file = Path.cwd() / ".gemini-session"
+    if not session_file.exists():
+        return
+    try:
+        with session_file.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        actual_str = str(actual_session)
+        if data.get("gemini_session_path") == actual_str:
+            return
+
+        data["gemini_session_path"] = actual_str
+        try:
+            data["gemini_project_hash"] = actual_session.parent.parent.name
+        except Exception:
+            pass
+
+        with session_file.open("w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        _debug(f"Updated .gemini-session with: {actual_str}")
+    except Exception as exc:
+        _debug(f"Failed to update .gemini-session: {exc}")
+
+
 def _parse_n(argv: list[str]) -> int:
     if len(argv) <= 1:
         return 1
@@ -76,6 +102,11 @@ def main(argv: list[str]) -> int:
         reader = GeminiLogReader()
         if session_path and session_path.exists():
             reader.set_preferred_session(session_path)
+
+        # Auto-update .gemini-session with actual session path
+        actual_session = reader.current_session_path()
+        if actual_session:
+            _update_session_file(actual_session)
 
         if n > 1:
             conversations = reader.latest_conversations(n)
