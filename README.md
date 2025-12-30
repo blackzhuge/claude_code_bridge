@@ -6,6 +6,13 @@
 
 **Build a real AI expert team. Give Claude Code / Codex / Gemini partners that never forget.**
 
+<p>
+  <span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#E6F7FF;color:#096DD9;font-weight:700;">交互皆可见</span><span style="color:#8c8c8c;font-weight:700;">，</span><span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#FFF1F0;color:#CF1322;font-weight:700;">模型皆可控</span>
+</p>
+<p>
+  <span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#E6F7FF;color:#096DD9;font-weight:700;">Every Interaction Visible</span><span style="color:#8c8c8c;font-weight:700;">, </span><span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#FFF1F0;color:#CF1322;font-weight:700;">Every Model Controllable</span>
+</p>
+
 [![Version](https://img.shields.io/badge/version-2.3-orange.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)

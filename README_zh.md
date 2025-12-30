@@ -6,6 +6,13 @@
 
 **打造真实的大模型专家协作团队，给 Claude Code / Codex / Gemini 配上"不会遗忘"的搭档**
 
+<p>
+  <span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#E6F7FF;color:#096DD9;font-weight:700;">交互皆可见</span><span style="color:#8c8c8c;font-weight:700;">，</span><span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#FFF1F0;color:#CF1322;font-weight:700;">模型皆可控</span>
+</p>
+<p>
+  <span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#E6F7FF;color:#096DD9;font-weight:700;">Every Interaction Visible</span><span style="color:#8c8c8c;font-weight:700;">, </span><span style="display:inline-block;padding:4px 10px;border-radius:999px;background:#FFF1F0;color:#CF1322;font-weight:700;">Every Model Controllable</span>
+</p>
+
 [![Version](https://img.shields.io/badge/version-2.3-orange.svg)]()
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg)]()
 
