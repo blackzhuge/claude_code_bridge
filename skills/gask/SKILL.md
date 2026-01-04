@@ -22,7 +22,10 @@ Use this skill ONLY when user **explicitly delegates** to Gemini:
 **CRITICAL: ALWAYS use run_in_background=true - NO EXCEPTIONS**
 
 ```
-Bash(gask "$ARGUMENTS", run_in_background=true)
+Bash(gask <<'EOF'
+$ARGUMENTS
+EOF
+, run_in_background=true)
 ```
 
 Where `$ARGUMENTS` is the user's delegation request (forwarded as-is to Gemini).
@@ -56,7 +59,7 @@ The system will automatically recall you when Gemini responds.
 ❌ WRONG: `Bash(gask "question")` - blocks and waits
 ❌ WRONG: `Bash(gask "<question>", run_in_background=true)` - placeholder syntax
 ❌ WRONG: Submit then check status - wastes time
-✅ RIGHT: `Bash(gask "$ARGUMENTS", run_in_background=true)` then END turn
+✅ RIGHT: `Bash(gask <<'EOF' ... EOF, run_in_background=true)` then END turn
 
 ## Parameters
 

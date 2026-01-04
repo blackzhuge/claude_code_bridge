@@ -22,7 +22,10 @@ Use this skill ONLY when user **explicitly delegates** to OpenCode:
 **CRITICAL: ALWAYS use run_in_background=true - NO EXCEPTIONS**
 
 ```
-Bash(oask "$ARGUMENTS", run_in_background=true)
+Bash(oask <<'EOF'
+$ARGUMENTS
+EOF
+, run_in_background=true)
 ```
 
 Where `$ARGUMENTS` is the user's delegation request (forwarded as-is to OpenCode).
@@ -56,7 +59,7 @@ The system will automatically recall you when OpenCode responds.
 ❌ WRONG: `Bash(oask "question")` - blocks and waits
 ❌ WRONG: `Bash(oask "<question>", run_in_background=true)` - placeholder syntax
 ❌ WRONG: Submit then check status - wastes time
-✅ RIGHT: `Bash(oask "$ARGUMENTS", run_in_background=true)` then END turn
+✅ RIGHT: `Bash(oask <<'EOF' ... EOF, run_in_background=true)` then END turn
 
 ## Parameters
 

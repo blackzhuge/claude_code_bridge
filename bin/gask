@@ -67,7 +67,7 @@ def _popen_detached(argv: list[str]) -> None:
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) <= 1:
+    if len(argv) <= 1 and sys.stdin.isatty():
         print("Usage: gask [--timeout SECONDS] [--output FILE] <message>", file=sys.stderr)
         return EXIT_ERROR
 
@@ -104,6 +104,8 @@ def main(argv: list[str]) -> int:
         parts.append(token)
 
     message = " ".join(parts).strip()
+    if not message and not sys.stdin.isatty():
+        message = sys.stdin.read().strip()
     if not message:
         print("[ERROR] Message cannot be empty", file=sys.stderr)
         return EXIT_ERROR

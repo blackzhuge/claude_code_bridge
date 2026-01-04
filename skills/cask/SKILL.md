@@ -22,7 +22,10 @@ Use this skill ONLY when user **explicitly delegates** to Codex:
 **CRITICAL: ALWAYS use run_in_background=true - NO EXCEPTIONS**
 
 ```
-Bash(cask "$ARGUMENTS", run_in_background=true)
+Bash(cask <<'EOF'
+$ARGUMENTS
+EOF
+, run_in_background=true)
 ```
 
 Where `$ARGUMENTS` is the user's delegation request (forwarded as-is to Codex).
@@ -56,7 +59,7 @@ The system will automatically recall you when Codex responds.
 ❌ WRONG: `Bash(cask "question")` - blocks and waits
 ❌ WRONG: `Bash(cask "<question>", run_in_background=true)` - placeholder syntax
 ❌ WRONG: Submit then check status - wastes time
-✅ RIGHT: `Bash(cask "$ARGUMENTS", run_in_background=true)` then END turn
+✅ RIGHT: `Bash(cask <<'EOF' ... EOF, run_in_background=true)` then END turn
 
 ## Parameters
 

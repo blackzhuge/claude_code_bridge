@@ -94,15 +94,13 @@ def _parse_args(argv: list[str]) -> Tuple[Optional[Path], float, str, bool]:
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) <= 1:
-        _usage()
-        return 1
-
     try:
         from cli_output import EXIT_ERROR, EXIT_NO_REPLY, EXIT_OK, atomic_write_text
         from opencode_comm import OpenCodeCommunicator
 
         output_path, timeout, message, quiet = _parse_args(argv)
+        if not message and not sys.stdin.isatty():
+            message = sys.stdin.read().strip()
         if not message:
             _usage()
             return EXIT_ERROR
