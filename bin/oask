@@ -21,6 +21,7 @@ sys.path.insert(0, str(lib_dir))
 from compat import setup_windows_encoding
 
 setup_windows_encoding()
+from process_lock import ProviderLock
 
 COMPLETION_MARKER = (os.environ.get("CCB_EXECUTION_COMPLETE_MARKER") or "[EXECUTION_COMPLETE]").strip() or "[EXECUTION_COMPLETE]"
 
@@ -126,22 +127,32 @@ def main(argv: list[str]) -> int:
         if not healthy:
             raise RuntimeError(f"[ERROR] Session error: {status}")
 
-        # Send message with marker hint (OpenCode uses timestamp for completion, not marker)
-        _, state = comm._send_message(_with_completion_marker_request(message))
+        # Use per-provider lock to serialize request-response cycles
+        lock_timeout = float(os.environ.get("CCB_LOCK_TIMEOUT", "60.0"))
+        with ProviderLock("opencode", timeout=lock_timeout):
+            # Clear output file if specified (avoid stale content)
+            if output_path and output_path.exists():
+                output_path.write_text("")
 
-        # Wait for reply using OpenCode's time.completed timestamp
-        reply, _ = comm.log_reader.wait_for_message(state, timeout)
-        if not reply:
-            if not quiet:
-                print(f"[TIMEOUT] Timeout after {int(timeout)}s", file=sys.stderr)
-            return EXIT_NO_REPLY
+            # Reset log state to ignore any messages before lock acquisition
+            comm.log_reader.capture_state()
 
-        # Strip marker if present (cleanup)
-        reply = _strip_completion_marker(reply)
+            # Send message with marker hint (OpenCode uses timestamp for completion, not marker)
+            _, state = comm._send_message(_with_completion_marker_request(message))
 
-        if output_path:
-            atomic_write_text(output_path, reply + "\n")
-            return EXIT_OK
+            # Wait for reply using OpenCode's time.completed timestamp
+            reply, _ = comm.log_reader.wait_for_message(state, timeout)
+            if not reply:
+                if not quiet:
+                    print(f"[TIMEOUT] Timeout after {int(timeout)}s", file=sys.stderr)
+                return EXIT_NO_REPLY
+
+            # Strip marker if present (cleanup)
+            reply = _strip_completion_marker(reply)
+
+            if output_path:
+                atomic_write_text(output_path, reply + "\n")
+                return EXIT_OK
 
         sys.stdout.write(reply)
         if not reply.endswith("\n"):
